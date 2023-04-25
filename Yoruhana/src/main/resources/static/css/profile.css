@@ -1,0 +1,119 @@
+/* 버튼 스타일 */
+input[type="button"] {background-color: #A2D9CE;color: #fff;padding: 10px 20px;border-radius: 5px;font-size: 16px;cursor: pointer;border: none;}
+#head {
+  font-size: 30px;
+  font-weight: bold;
+  color: black;
+  text-shadow: 2px 2px 2px white;
+}
+
+#section {
+  background-color: #fff;
+  padding: 50px;
+  border-radius: 12px;
+  align:center;
+  margin:auto;
+  margin-top:30px;
+  width:50%;
+}
+th {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.text_area{
+  padding: 10px;
+  width: 97%;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+/* 에러 텍스트 스타일 */
+#error {
+  color: #E74C3C;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+/* 중복확인 결과 텍스트 스타일 */
+#check {
+  margin-left: 10px;
+  color: #27AE60;
+  font-size: 14px;
+}
+
+/* 에러 텍스트와 중복확인 결과 텍스트 스타일 */
+#error, #check {
+  display: none;
+}
+
+/* 선택된 셀 스타일 */
+  input[type="text"],
+  input[type="password"],
+  input[type="number"],
+  select {
+    padding: 10px;
+    width: 97%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+      /* 테이블 스타일 */
+  table {
+   width: 100%;
+   border-collapse: collapse;
+  }
+
+#head {
+  font-size: 30px;
+  font-weight: bold;
+  color: black;
+  text-shadow: 2px 2px 2px white;
+}
+
+/* 중복확인 버튼 스타일 */
+#mb_nick + input[type="button"] {
+  background-color: #A2D9CE;
+  color: #fff;
+  border: none;
+}
+.target_mb_file{
+  border-radius:50%;
+  }
+  .target_mb_file:hover{
+  background-color:none;
+  }
+
+  #img_box,#img_box_null {
+  width:250px;
+  height:250px;
+  border-radius:70%;
+  overflow:hidden;
+  }
+
+  #target_mb_file, #target_mb_file2{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  }
+
+  /* 폼 스타일 */
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  input[type="file"] {
+    display: none;
+  }
+textarea{
+font-size:16px;
+}
+
+
+
+

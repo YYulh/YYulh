@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/searchPenpal.css" />
+<div th:insert = "~{common/header :: header}"></div>
+<style>
+  .searchName{
+     margin: 3px;
+    background-color: #A2D9CE;
+    color: #fff;
+    border-radius: 10px;
+    padding: 1px;
+    width: 50px;
+    text-align: center;
+    margin-left: 20px;
+  }
+  #searchGo{
+  margin-left: 20px;
+  height: 40px;
+  margin-right: 20px;
+  }
+
+  #search_box{
+  display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60%;
+    margin: auto;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 15px;
+  }
+
+  .searchSelect{
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    height: 23px;
+    width: 62px;
+    text-align: center;
+  }
+
+</style>
+<body>
+
+
+<div id="section">
+
+  <div>
+    <h3 id="head"> 펜팔 찾기</h3>
+  </div>
+
+<div>
+  <form name="form1" id = "search_box" action="/searchPenpalForm.do">
+  <div class="searchName">나이 </div>
+  <select name="start_old" class="searchSelect">
+    <option value="0" th:selected="${start_old} =='0'">무관</option>
+    <option value="18" th:selected="${start_old} =='18'">18</option>
+    <option value="19" th:selected="${start_old} =='19'">19</option>
+    <option value="20" th:selected="${start_old} =='20'">20</option>
+    <option value="21" th:selected="${start_old} =='21'">21</option>
+    <option value="22" th:selected="${start_old} =='22'">22</option>
+    <option value="23" th:selected="${start_old} =='23'">23</option>
+    <option value="24" th:selected="${start_old} =='24'">24</option>
+    <option value="25" th:selected="${start_old} =='25'">25</option>
+    <option value="26" th:selected="${start_old} =='26'">26</option>
+    <option value="27" th:selected="${start_old} =='27'">27</option>
+    <option value="28" th:selected="${start_old} =='28'">28</option>
+    <option value="29" th:selected="${start_old} =='29'">29</option>
+    <option value="30" th:selected="${start_old} =='30'">30</option>
+    <option value="31" th:selected="${start_old} =='31'">31</option>
+    <option value="32" th:selected="${start_old} =='32'">32</option>
+    <option value="33" th:selected="${start_old} =='33'">33</option>
+    <option value="34" th:selected="${start_old} =='34'">34</option>
+    <option value="35" th:selected="${start_old} =='35'">35</option>
+    <option value="36" th:selected="${start_old} =='36'">36</option>
+    <option value="37" th:selected="${start_old} =='37'">37</option>
+    <option value="38" th:selected="${start_old} =='38'">38</option>
+    <option value="39" th:selected="${start_old} =='39'">39</option>
+    <option value="40" th:selected="${start_old} =='40'">40</option>
+  </select> ~
+  <select  name="end_old" class="searchSelect">
+    <option value="99" th:selected="${end_old} =='0'">무관</option>
+    <option value="18" th:selected="${end_old} =='18'">18</option>
+    <option value="19" th:selected="${end_old} =='19'">19</option>
+    <option value="20" th:selected="${end_old} =='20'">20</option>
+    <option value="21" th:selected="${end_old} =='21'">21</option>
+    <option value="22" th:selected="${end_old} =='22'">22</option>
+    <option value="23" th:selected="${end_old} =='23'">23</option>
+    <option value="24" th:selected="${end_old} =='24'">24</option>
+    <option value="25" th:selected="${end_old} =='25'">25</option>
+    <option value="26" th:selected="${end_old} =='26'">26</option>
+    <option value="27" th:selected="${end_old} =='27'">27</option>
+    <option value="28" th:selected="${end_old} =='28'">28</option>
+    <option value="29" th:selected="${end_old} =='29'">29</option>
+    <option value="30" th:selected="${end_old} =='30'">30</option>
+    <option value="31" th:selected="${end_old} =='31'">31</option>
+    <option value="32" th:selected="${end_old} =='32'">32</option>
+    <option value="33" th:selected="${end_old} =='33'">33</option>
+    <option value="34" th:selected="${end_old} =='34'">34</option>
+    <option value="35" th:selected="${end_old} =='35'">35</option>
+    <option value="36" th:selected="${end_old} =='36'">36</option>
+    <option value="37" th:selected="${end_old} =='37'">37</option>
+    <option value="38" th:selected="${end_old} =='38'">38</option>
+    <option value="39" th:selected="${end_old} =='39'">39</option>
+    <option value="40" th:selected="${end_old} =='40'">40</option>
+  </select>
+
+  <div  class="searchName">성별 </div>
+  <select id="sex" class="searchSelect" name="searchSex">
+    <option value="99" th:selected="${searchSex} == 99">무관</option>
+    <option value="0" th:selected="${searchSex} == 0">남자</option>
+    <option value="1" th:selected="${searchSex} == 1">여자</option>
+  </select>
+
+  <div  class="searchName">국적 </div>
+  <select id="country" class="searchSelect" name="searchCountry">
+    <option value="99" th:selected="${searchCountry} == 99">무관</option>
+    <option value="Japan" th:selected="${searchCountry} == 'Japan'">일본</option>
+    <option value="South,Korea" th:selected="${searchCountry} == ('South'+ ',' + 'Korea')">대한민국</option>
+  </select>
+
+  <div class="searchName">사진 </div>
+  <select id="pic" class="searchSelect" name="searchPic" >
+    <option value="99" th:selected="${searchPic} == 99">무관</option>
+    <option value="0" th:selected="${searchPic} == 0">있음</option>
+    <option value="1" th:selected="${searchPic} == 1">없음</option>
+  </select>
+  <input type="button" value="검색" id="searchGo" onclick ="searchList();">
+  </form>
+</div>
+  <div id = "total" th:text="'검색된 회원 : ' + ${total} + '명'"></div>
+
+
+<div th:each="list , i : ${list}" >
+
+<!--모달-->
+  <div th:id="'modal' + ${list.mb_no}" class="modal" align="center">
+    <div class="modal-content">
+      <a  href="#" class = "close" th:onclick="|closing('${list.mb_no}')|">&times;</a>
+      <h2 th:text="${list.mb_nick}">닉네임</h2>
+      <form >
+        <div class="form-group" align="center">
+          <div class = "img_area_modal">
+            <img th:src="@{/upload/} + ${list.mb_file}"  class="mb_file_modal" th:if ="${session.file} != ''">
+            <img th:src="@{/upload/} + 'person-circle.svg'"  class="mb_file_modal" th:if ="${session.file} == ''">
+          </div>
+          <div>
+            <textarea th:text="${list.mb_prof_content}" readonly></textarea>
+          </div>
+        </div>
+
+        <span><a th:href="@{/chatMessage.do(nick2=${list.mb_nick})}"><input type="button" value = "채팅하기" class="sendMail" ></a></span>
+        <span><input type="button" value = "친구신청" class="sendFriend" ></span>
+      </form>
+    </div>
+  </div>
+
+
+  <div class="memberList" th:onclick="|show('${list.mb_no}')|" th:if="${session.no}!=${list.mb_no}">
+
+    <div class="img_area">
+      <img th:src="@{/upload/} + ${list.mb_file}" name="mb_file" class="mb_file"  th:if = "${list.mb_file} != ''">
+      <img th:src="@{/upload/} + 'person-circle.svg'"  class="mb_file" th:if ="${session.file} == ''">
+    </div>
+
+    <input type="hidden" th:value = "${list.mb_no}">
+
+    <div class="cont_box">
+
+      <div >
+        <ul th:class="mb_box" >
+          <li th:text="${list.mb_nick}" name = "mb_nick"></li>
+          <li th:if="${list.mb_sex} == '남'" style="color:royalBlue;font-weight: bold;">남성</li>
+          <li th:if="${list.mb_sex} == '여'" style="color:hotPink; font-weight: bold;">여성</li>
+          <li th:text="'나이 : ' + ${list.mb_bir}">나이</li>
+          <li th:text="'국적 : ' + ${list.mb_country}">국적</li>
+        </ul>
+      </div>
+
+      <div>
+        <span th:text="${list.mb_prof_content}" class="content" readonly></span>
+      </div>
+
+  </div>
+
+  </div>
+
+
+  </div>
+<div id="paging">
+  <!-- 페이징 처리 한페이지에 50개씩 -->
+    <a th:if = "${nowpage > 2} " th:href="@{/searchPenpalForm.do(start=${start}-${limit} * 3)}">[이전]</a>
+
+    <a th:if = "${nowpage > 2} " th:href="@{/searchPenpalForm.do(start=${start}-${limit} * 2)}"th:text="${nowPage} - 2"></a>
+
+    <a th:if = "${nowPage > 1} " th:href="@{/searchPenpalForm.do(start=${start}-${limit})}" th:text="${nowPage} - 1"></a>
+
+    <a th:text="${nowPage}" style="background-color:#A2D9CE;"></a>
+
+    <a th:if = "${nowPage < totalPage }" th:href="@{/searchPenpalForm.do(start=${start}+${limit})}" th:text="${nowPage} + 1"></a>
+
+    <a th:if = "${nowPage +1 < totalPage }" th:href="@{/searchPenpalForm.do(start=${start}+${limit} * 2)}" th:text="${nowPage} + 2"></a>
+
+  <a th:if = "${nowPage +1 < totalPage }" th:href="@{/searchPenpalForm.do(start=${start}+${limit} * 3)}">[다음]</a>
+</div>
+
+
+</div>
+
+
+
+
+</body>
+
+<div th:insert = "~{common/footer :: footer}"></div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script th:inline="javascript">
+function searchList(){
+  if(form1.start_old.value > form1.end_old.value){
+  alert("나이의 설정이 올바르지 않습니다.");
+  form1.start_old.focus();
+  return;
+  }else{
+  form1.submit();
+  }
+}
+
+/*<![[CDATA[*/
+  var mb_no = /*[[${session.no}]]*/
+/*]]>*/
+
+ function show(e){
+  var modal = document.getElementById("modal" +e);
+
+  let opacity = 0;
+   modal.style.opacity = 0;
+  modal.style.display = 'block';
+
+  const timer = setInterval(() => {
+    opacity += 0.34;
+    modal.style.opacity = opacity;
+    if (opacity >= 1) {
+      clearInterval(timer);
+    }
+  }, 50);
+
+          //조회수 증가
+             $.ajax({
+				url:'/increase_see.do',
+				type: 'POST',
+				data: JSON.stringify({
+					'mb_no' : mb_no
+				}),
+				dataType: 'json',
+				contentType: 'application/json'
+			});
+}
+
+ function closing(e){
+  var modal = document.getElementById("modal" +e);
+  let opacity = 1;
+
+const timer = setInterval(() => {
+  opacity -= 0.34;
+  modal.style.opacity = opacity;
+  if (opacity <= 0) {
+    clearInterval(timer);
+
+   setTimeout(() => {
+      modal.style.display = 'none';
+    }, 100);
+  }
+}, 50);
+}
+</script>
+
+</html>
