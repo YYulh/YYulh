@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="management">
+	
+	<select id="selectBannerList" resultType="vo.ManagementVO">
+		select * from adminPic where ap_filename like '%' || 'Banner' || '%'
+	</select>
+
+	<insert id="insertPic" parameterType="vo.ManagementVO">
+		insert into adminPic values(seq_adminpic_ap_no.nextval,#{ap_filename},#{ap_path})
+	</insert>
+	
+	<delete id = "deletePic" parameterType = "String">
+		delete from adminPic where ap_no =#{no}
+	</delete>
+	
+	<select id="selectMembershipList" resultType="vo.ManagementVO">
+		select * from adminPic where ap_filename like '%' || 'Membership' || '%'
+	</select>
+	
+	<select id="selectSmallCate1" resultType="vo.ProductVO">
+		select * from prodSmallCate where pbc_no =1 order by psc_no asc
+	</select>
+	
+	<select id="selectSmallCate2" resultType="vo.ProductVO">
+		select * from prodSmallCate where pbc_no =2 order by psc_no asc
+	</select>
+	
+	<insert id="insertSmallCate1" parameterType = "vo.ProductVO" useGeneratedKeys="false">
+		merge 
+		into prodSmallCate 
+		using dual
+		on(psc_no = #{psc_no})
+		when matched then
+		update
+		set psc_name = #{psc_name}
+		when not matched then
+		insert(psc_no,pbc_no,psc_name)
+		values(seq_prodSmallCate_psc_no.nextval,#{pbc_no},#{psc_name})
+	</insert>
+	
+	<delete id = "deleteCate1" parameterType = "String">
+		delete from prodSmallCate where psc_no =#{no}  
+	</delete>
+	
+		<insert id="insertSmallCate2" parameterType = "vo.ProductVO" useGeneratedKeys="false">
+		merge 
+		into prodSmallCate 
+		using dual
+		on(psc_no = #{psc_no})
+		when matched then
+		update
+		set psc_name = #{psc_name}
+		when not matched then
+		insert(psc_no,pbc_no,psc_name)
+		values(seq_prodSmallCate_psc_no.nextval,#{pbc_no},#{psc_name})
+	</insert>
+	
+	<delete id = "deleteCate2" parameterType = "String">
+		delete from prodSmallCate where psc_no =#{no}  
+	</delete>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

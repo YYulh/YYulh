@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+		
+	<select id="selectFaqList" parameterType="int" resultType="vo.BoardVO" >
+	<![CDATA[
+	select * from (select rownum rn,f.*,m.mb_name,o.bo_name from faq f,members m ,boardOption o where m.mb_no = f.mb_no and f.bo_no = o.bo_no order by faq_no asc) where rn >=#{start} and rn <= #{start} + 14	
+	]]>
+	</select>	
+
+	<select id="getTotal" resultType="int">
+	select count(*) from faq 
+	</select>
+	
+	<select id="boardOption" parameterType="int" resultType="vo.BoardVO" >
+	select * from boardOption where bc_no = #{no}
+	</select>
+		
+	<insert id ="insertFaq" parameterType = "vo.BoardVO" >
+	insert into faq values(seq_faq_faq_no.nextval,1,#{bo_no},#{faq_title},#{faq_content,jdbcType=CLOB},sysdate,0)
+	</insert>
+		
+	<select id="getSeq"  resultType="int">
+	select* from (select faq.faq_no from faq order by rownum desc) where rownum =1
+	</select>
+
+	<select id="getReSeq"  resultType="int">
+	select* from (select r.re_no from review r order by rownum desc) where rownum =1
+	</select>
+	
+	<insert id ="insertPic" parameterType = "vo.BoardVO" >
+	insert into faqPic values(seq_faqPic_fp_no.nextval,#{faq_no},#{fp_filename},#{fp_path})
+	</insert>
+	
+	<select id="faqContent" parameterType="int" resultType = "vo.BoardVO">
+	select f.*,m.mb_name,o.bo_name from faq f,members m ,boardOption o  where m.mb_no = f.mb_no and f.bo_no = o.bo_no and f.faq_no= #{faq_no}
+	</select>
+	
+	<select id= "faqPic" parameterType="int" resultType = "vo.BoardVO">
+	select p.fp_filename from faq f join faqPic p on f.faq_no = p.faq_no and f.faq_no = #{faq_no}
+	</select>
+	
+	<update id="increaseView" parameterType="int" >
+	update faq set faq_view = faq_view + 1 where faq_no = #{faq_no}
+	</update>
+	
+	<update id="faqUpdate" parameterType="vo.BoardVO" >
+	update faq set faq_title = #{faq_title}, bo_no= #{bo_no} , faq_content = #{faq_content,jdbcType=CLOB} where faq_no = #{faq_no}
+	</update>
+	
+	<delete id="faqDelete" parameterType="int" >
+	delete faq where faq_no = #{faq_no}
+	</delete>
+	
+	<select id="selectQnaList" parameterType="int" resultType="vo.BoardVO" >
+	<![CDATA[
+	select * from (select rownum rn,a.* from (select q.*,m.mb_name,o.bo_name from qna q,members m ,boardOption o where m.mb_no = q.mb_no and q.bo_no = o.bo_no order by q.qna_origin desc,q.qna_order asc,q.qna_layer asc) a) where rn >=#{start} and rn <= #{start}+14 order by rn asc	
+	
+	]]>
+	</select>
+	
+	<select id="getTotalQna" resultType="int">
+	select count(*) from qna 
+	</select>
+	
+	<select id="selectOneRef" parameterType="int" resultType="vo.BoardVO">
+	select q.*, m.mb_name,o.* from qna q, members m, boardOption o where q.bo_no = o.bo_no and q.mb_no = m.mb_no and q.qna_no = #{seq}
+	</select>
+	
+	<select id="selectOneRefRe" parameterType="int" resultType="vo.BoardVO">
+	select * from review r,members m , product p,orders o where r.prod_no = p.prod_no and r.mb_no = m.mb_no and r.ord_no = o. ord_no and r.re_no =#{seq}
+	</select>
+	
+	<insert id ="insertQna" parameterType = "vo.BoardVO" >
+	insert into qna values(seq_qna_qna_no.nextval,#{mb_no},#{bo_no},#{qna_title},#{qna_content,jdbcType=CLOB},sysdate,0,#{qna_isprivate},#{qna_pw},#{qna_origin},#{qna_order},#{qna_layer},0)
+	</insert>
+	
+	<select id="dualSeq" resultType="int">
+	select seq_qna_qna_no.nextval from dual
+	</select>
+	
+	<select id="dualSeqRe" resultType="int">
+	select seq_review_re_no.nextval from dual
+	</select>
+	
+	<select id="selectFaqPw" parameterType = "vo.BoardVO" resultType="vo.BoardVO">
+		select qna_pw from qna where qna_no =#{qna_no} and qna_pw = #{qna_pw}
+	</select>
+	
+	<select id="qnaContent" parameterType="int" resultType = "vo.BoardVO">
+	select q.*,m.mb_name,m.mb_id,o.bo_name from qna q,members m ,boardOption o  where m.mb_no = q.mb_no and q.bo_no = o.bo_no and q.qna_no= #{qna_no}
+	</select>
+	
+	<update id="increaseQnaView" parameterType="int" >
+	update qna set qna_view = qna_view + 1 where qna_no = #{qna_no}
+	</update>
+	
+	<select id="selectQna" parameterType="int" resultType = "vo.BoardVO">
+	select * from qna where qna_no = #{seq}
+	</select>
+	
+	<update id="qnaUpdate" parameterType="vo.BoardVO" >
+	update qna set qna_title = #{qna_title}, bo_no= #{bo_no} , qna_content = #{qna_content,jdbcType=CLOB} where qna_no = #{qna_no}
+	</update>
+	
+	<delete id="qnaDelete" parameterType="int" >
+	delete qna where qna_no = #{qna_no}
+	</delete>
+	
+	<select id="selectMembershipList" resultType="vo.ManagementVO">
+		select * from adminPic where ap_filename like '%' || 'Membership' || '%'
+	</select>
+	
+	<select id="orderList" resultType="vo.OrderVO">
+		select o.ord_no,o.ord_serial from product p,members m,orders o where m.mb_no = o.mb_no and p.prod_no = o.prod_no and o.prod_no =#{prod_no} and o.mb_no =#{mb_no}
+	</select>
+	
+	<select id="checkOrd" resultType="vo.OrderVO">
+		select * from review where ord_no =#{ord_no}
+	</select>
+	
+	<select id="checkOrd_no" parameterType="int" resultType="vo.BoardVO">
+		select * from review where ord_no =#{ord}
+	</select>
+	
+	<insert id ="insertRe" parameterType = "vo.BoardVO" >
+	insert into review values(seq_review_re_no.nextval,#{mb_no},#{prod_no},#{ord_no},#{re_title},#{re_content},sysdate,0,0,#{re_rate},#{re_origin},#{re_layer},#{re_order},0)
+	</insert>
+	
+	<insert id ="insertRePic" parameterType = "vo.BoardVO" >
+	insert into reviewPic values(seq_reviewPic_repic_no.nextval,#{re_no},#{rp_filename},#{rp_path})
+	</insert>
+	
+	<update id ="updateProd_rate" parameterType = "int">
+	update product set prod_rate=( select avg(re_rate) from review) where prod_no=#{prod_no}
+	</update>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="stock">
+
+	<select id="selectList" parameterType="int" resultType="vo.StockVO" >
+		<![CDATA[
+			select * from (select rownum rn,s.*,p.prod_name from stock s join product p on s.prod_no =p.prod_no order by s.stock_no desc) where rn >=#{start} and rn <= #{start} + 49	
+		]]>
+	</select>
+
+	<select id="getTotal" resultType="int">
+		select count(*) from members 
+	</select>
+	
+	<update id = "updateStock" parameterType = "vo.StockVO">
+		update stock set stock_in = #{stock_in},stock_out = (stock_out + #{stock_in}) where stock_no = #{stock_no}
+	</update>
+	
+<!-- 	<select id="selectStock" parameterType = "int" resultType="vo.StockVO"> -->
+<!-- 		select * from stock where stock_no = #{no}  -->
+<!-- 	</select> -->
+	
+	<insert id= "insertStock" parameterType = "vo.StockVO">
+		insert into stock values(seq_stock_stock_no.nextval,#{prod_no},#{stock_sellcnt},#{stock_sell},sysdate,#{stock_bad},#{stock_in},(#{stock_out} + #{stock_in}))
+	</insert>
+	
+	<select id ="stockDetail" resultType="vo.StockVO" parameterType = "int">
+		select * from (select rownum rn,stock.*,product.prod_name from stock join product on product.prod_no =#{no} and product.prod_no = stock.prod_no order by stock.stock_no desc) where rownum =1
+	</select>
+	
+	<delete id = "deleteStock" parameterType = "String">
+		delete from stock where stock_no =#{no}
+	</delete>
+</mapper>

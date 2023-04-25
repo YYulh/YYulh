@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mypage">
+
+<select resultType="member" parameterType="int" id="selectOne">select * from members where mb_no=#{mb_no} </select>
+
+<select resultType="grade" parameterType="int" id="selectGrade">select m.*,g.* from members m, grade g where m.mb_no =#{mb_no} and m.grade_no=g.grade_no </select>
+
+<select resultType="int" parameterType="int" id="getCouponCount"> select count(*) cr_cnt from couponrefer WHERE mb_no=#{mb_no} and cr_isused = 0 </select>
+
+
+<select resultType="coupon" parameterType="map" id="getCouponList">
+
+<![CDATA[
+select * from(select rownum rn, c.cpn_no, c.cpn_name, c.grade_no, c.cpn_price, cr.mb_no, cr.cr_date1, cr.cr_date2, cr.cr_serial, cr.cr_isused from coupon c, couponrefer cr where c.cpn_no = cr.cpn_no and cr.mb_no =#{mb_no}) b where b.rn >= #{start} and b.rn <= #{start} + 4
+
+]]>
+</select>
+
+<select resultType="order" parameterType="int" id="selectOrders">select * from orders where mb_no=#{mb_no} </select>
+
+<!-- select ord_date, ord_serial, ord_cnt, ord_price, ord_no, pt.*, p.*, i.pp_filename from orders o, processtype pt, product p, productPic i where o.py_no = pt.py_no and o.mb_no=#{mb_no} and i.pp_filename like '%' || 'Main' || '%' -->
+
+
+
+<select resultType="order" parameterType="int" id="orderList">
+
+<![CDATA[
+select * from (select rownum rn, ord_date, ord_serial, ord_cnt, ord_price, ord_no, pt.*, p.*, i.pp_filename  
+from orders o, processtype pt, product p, productPic i  
+where o.prod_no = p.prod_no and o.prod_no = i.prod_no and o.py_no = pt.py_no and o.mb_no=#{mb_no} AND pp_no in (select min(pp_no) from productpic where pp_filename like '%' || 'Main' || '%' group by prod_no))
+where rn >= #{start} and rn <= #{start} + 4
+
+]]>
+</select>
+
+<select resultType="order" parameterType="map" id="getPointFromOrder">
+
+<![CDATA[
+select * from(select rownum rn,m.mb_no, o.ord_date, o.ord_price, o.ord_serial, o.prod_no, p.prod_name from members m, orders o, product p where o.mb_no =#{mb_no} and m.mb_no = o.mb_no and o.prod_no = p.prod_no)b where b.rn >= #{start} and b.rn <= #{start} + 4
+]]>
+</select>
+
+<select resultType="order" parameterType="int" id="selectProcess">select o.*, p.* from orders o, processtype p where o.mb_no=#{mb_no} and o.py_no = p.py_no </select>
+
+<select resultType="int" parameterType="int" id="getUsedPointSum"> select coalesce(sum(ord_usepoint),0) from orders where mb_no = #{mb_no} </select>
+
+<!-- update 칼럼 추가 필요! 뭐뭐 수정가능하게 할껀지 상의 후 추가하기! 현재 수정 가능한 항목: 비밀번호, 이메일, 휴대폰번호, sms 수신여부-->
+
+
+<update parameterType="member" id="update">update members set mb_pw=#{mb_pw}, mb_email1=#{mb_email1},mb_email2=#{mb_email2},mb_tel1=#{mb_tel1},mb_tel2=#{mb_tel2},mb_tel3=#{mb_tel3}, mb_sms=#{mb_sms}, mb_ckmail=#{mb_ckmail} where mb_no=#{mb_no} </update>
+
+<update parameterType="int" id="leave">update members set mb_leave=1 where mb_no=#{mb_no} </update>
+
+<!-- <select id="shippingAddr" parameterType="int" resultType="member"><![CDATA[select rownum, ship_name,ship_personname,ship_addr,ship_phone1,ship_phone2,ship_phone3 from shippingaddr where rownum >=#{start} and rownum <= #{start} + 49]]> </select> -->
+
+
+
+<select resultType="member" parameterType="map" id="shippingAddr">
+
+<![CDATA[
+	select * from(select rownum rn, m.mb_no, s.shipaddr_no ,s.ship_name, s.ship_personName, s.ship_addr, s.ship_tel1, s.ship_tel2, s.ship_tel3, s.ship_default
+	from members m, shippingaddr s
+	where m.mb_no = s.mb_no and m.mb_no =#{mb_no})where rn >= #{start}  and rn <= #{start} + 49
+	]]>
+</select>
+
+<select resultType="member" parameterType="int" id="shippingAddr1">select * from shippingaddr where shipaddr_no = #{shipaddr_no} </select>
+
+
+<insert parameterType="member" id="addAddr">
+
+<![CDATA[insert into shippingaddr ]]>values(SEQ_shippingaddr_shipaddr_no.nextval,#{mb_no},#{ship_name},#{ship_personname},#{ship_addr},#{ship_tel1},#{ship_tel2},#{ship_tel3},#{ship_default}) 
+</insert>
+
+<select resultType="int" id="getTotal">select count(*) from members </select>
+
+<select resultType="int" parameterType="int" id="getOrderTotal">select count(*) from orders where mb_no = #{mb_no} </select>
+
+<select resultType="int" parameterType="int" id="couponTotal">select count(*) from couponrefer where mb_no = #{mb_no} </select>
+
+<delete parameterType="String" id="deleteAddr">delete from shippingaddr where shipaddr_no = #{shipaddr_no} </delete>
+
+</mapper>

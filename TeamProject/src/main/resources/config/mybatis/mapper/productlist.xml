@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="productlist">
+
+	<select id="selectList" parameterType="String" resultType="vo.ProductVO">
+	select p.*,c.cd_list,i.pp_filename,i.pp_path from product p,categorieDE c , productPic i  where p.prod_no = c.cd_no and c.cd_no = i.prod_no and cd_list like '%' || #{name} || '%' and pp_filename like '%' || 'Main' || '%'
+	</select>
+
+	<select id="selectContentPic" parameterType="int" resultType="vo.ProductVO">
+	select p.*,i.pp_filename from product p , productPic i  where p.prod_no = i.prod_no and p.prod_no = #{no} and pp_filename like '%' || 'Content' || '%'
+	</select>
+	
+	<select id="selectDetailPic" parameterType="int" resultType="vo.ProductVO">
+	select p.*,i.pp_filename from product p , productPic i  where p.prod_no = i.prod_no and p.prod_no = #{no} and pp_filename like '%' || 'Detail' || '%'
+	</select>
+	
+	<select id="selectProduct" parameterType="int" resultType="vo.ProductVO">
+	select * from product where prod_no = #{no}
+	</select>
+	
+	<select id="selectFreebies" resultType="vo.ProductVO">
+	select * from product p join productPic i on p.prod_no = i.prod_no and pp_filename like '%' || 'Freebies' || '%'
+	</select>
+	
+	<select id ="selectProductMore" parameterType="int" resultType="String">
+	select prod_more from product where prod_more = (select prod_more from product where prod_no=#{no}) and prod_no =#{no}
+	</select>
+	
+	<select id ="selectMoreList" parameterType="map" resultType="vo.ProductVO">
+	select * from (select * from product p join productPic i on p.prod_no = i.prod_no)
+	where pp_filename like '%' || 'Main' || '%' and 
+
+	(prod_name like '${more0}' or 
+	prod_name like '${more1}' or 
+	prod_name like '${more2}' or 
+ 	prod_name like '${more3}')
+	</select>
+	
+	<select id ="selectOptionList" parameterType="int" resultType="vo.ProductVO">
+	select * from prodOption o join product p on p.prod_no=o.prod_no and p.prod_no = #{no}
+	</select>
+	
+	<select id ="selectReviewList" parameterType="int" resultType="vo.BoardVO">
+	select rownum r, r.*,m.mb_name,o.ord_serial,g.grade_name,c.prod_name from review r ,product c,members m ,grade g,orders o  where r.mb_no = m.mb_no and r.ord_no = o.ord_no and  m.grade_no  = g.grade_no and c.prod_no = r.prod_no and c.prod_no= #{no}
+	</select>
+	
+	<select id ="getReviewCnt"  parameterType="int" resultType="int">
+	select count(*) from review where prod_no =#{no}
+	</select>
+	
+	<select id="selectRePic"  resultType="vo.BoardVO">
+		select * from reviewPic
+	</select>
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="order">
+
+<select resultType="member" parameterType="int" id="selectOne">select m.*,g.* from members m, grade g where m.mb_no =#{mb_no} and m.grade_no=g.grade_no </select>
+
+<select resultType="int" parameterType="int" id="getCouponCount"> select count(*) cr_cnt from couponrefer WHERE mb_no=#{mb_no} and cr_isused = 0</select>
+
+<!-- 장바구니 추가 -->
+
+
+<insert parameterType="order" id="insertCart">
+insert into cart values(SEQ_cart_cart_no.nextval,#{prod_no},#{mb_no},#{po_no},#{cart_cnt})
+ </insert>
+
+<!-- 장바구니 리스트 -->
+
+
+<select resultType="order" id="listCart"> 
+   SELECT c.cart_no,c.mb_no,c.prod_no,m.mb_name,p.prod_name,c.cart_cnt,p.prod_price,p.prod_sellprice,( p.prod_price * c.cart_cnt ) AS money,i.pp_filename FROM members m,product p,cart c,productPic i WHERE m.mb_no = c.mb_no AND p.prod_no = c.prod_no AND c.mb_no = #{mb_no} AND p.prod_no = i.prod_no and pp_no in (select pp_no from productPic where pp_filename like '%' || 'Main' || '%') ORDER BY c.cart_no DESC 
+</select>
+<!-- 장바구니 전체 금액 -->
+
+
+
+<select resultType="int" id="sumCart">
+
+<![CDATA[
+	select nvl(sum(p.prod_price * c.cart_cnt),0) money
+	from cart c, product p
+	where c.prod_no = p.prod_no and c.mb_no = #{mb_no}
+	]]>
+</select>
+
+<!-- 장바구니 수정 -->
+
+
+<update parameterType="order" id="updateCart">update cart set cart_cnt=#{cart_cnt} where mb_no = #{mb_no} and prod_no = #{prod_no} </update>
+
+<!-- 장바구니 삭제 -->
+
+
+<delete parameterType="String" id="deleteCart">delete from cart where cart_no = #{cart_no} </delete>
+
+<delete parameterType="int" id="deleteCartAll">delete from cart where mb_no = #{mb_no} </delete>
+
+<!-- 장바구니 동일 상품 있는지 확인 -->
+
+
+<select resultType="int" id="getCartCount"> select count(*) from cart where mb_no=${mb_no} and prod_no=${prod_no} </select>
+
+<update parameterType="order" id="condUpdateCart"> update cart set cart_cnt = cart_cnt + #{cart_cnt} where mb_no = #{mb_no} and prod_no = #{prod_no} </update>
+
+<select resultType="vo.OrderVO" parameterType="String" id="getPo_no"> select po_no from prodOption where po_name like #{optionName} </select>
+
+<select resultType="vo.OrderVO" parameterType="vo.OrderVO" id="checkCart"> select * from cart where prod_no = #{prod_no} and po_no = #{po_no} and mb_no =#{mb_no} </select>
+
+<!-- 주문 insert -->
+
+
+<!-- 주문시 배송준비중 이기때문에 py_no = 1 (pt_name = 0,배송준비중 ) 로 설정했습니다! -->
+
+
+
+<insert parameterType="order" id="insertOrder">
+insert into orders values( SEQ_orders_ord_no.nextval, #{mb_no}, #{prod_no}, #{grade_no}, 1, #{cpn_no_str}, #{shipaddr_no_str}, sysdate, CONCAT(TO_CHAR(SYSDATE, 'YYYYMMDD'), LPAD(TO_CHAR(TRUNC(DBMS_RANDOM.VALUE(1, 9999)) ), 5, '0')), #{ord_receiver}, #{ord_tel1}, #{ord_tel2}, #{ord_tel3}, #{ord_addr}, #{ord_post}, #{ord_usepoint}, #{ord_price}, #{ord_cnt}, (DBMS_RANDOM.VALUE(100000, 999999)), #{ord_msg}, #{ord_fee}) 
+<selectKey resultType="int" keyProperty="ord_no" order="AFTER">SELECT SEQ_orders_ord_no.currval from dual </selectKey>
+
+</insert>
+
+<!-- SELECT SEQ_orders_ord_no.currval from dual; currval('SEQ_orders_ord_no')-->
+
+
+<insert parameterType="order" id="insertPay"> insert into pay values(SEQ_pay_pay_no.nextval,#{ord_no},#{pay_acc},#{pay_bnk},#{pay_method}) </insert>
+
+<update id="updateUsedPoint">update members set mb_point = (mb_point - (select ord_usepoint From orders Where ord_no = #{ord_no}))where mb_no = #{mb_no} </update>
+
+<update parameterType="int" id="updateMbPoint">update members set mb_point = (COALESCE(mb_point,0) + #{mb_point}) WHERE mb_no = #{mb_no} </update>
+
+<!-- order coupon -->
+
+
+
+<select resultType="coupon" parameterType="map" id="getCouponList">
+
+<![CDATA[
+select * from(select rownum rn, c.cpn_no, c.cpn_name, c.grade_no, c.cpn_price, cr.mb_no, cr.cr_date1, cr.cr_date2, cr.cr_serial, cr.cr_isused, cr.cr_no from coupon c, couponrefer cr where c.cpn_no = cr.cpn_no and cr.mb_no =#{mb_no}) where rn >= #{start} and rn <= #{start} + 4
+
+]]>
+</select>
+
+<select resultType="int" parameterType="int" id="couponTotal">select count(*) from couponrefer where mb_no = #{mb_no} </select>
+
+<!-- order ShippingAddr -->
+
+
+<select resultType="member" parameterType="map" id="shippingAddr">
+
+<![CDATA[
+	select * from(select rownum rn, m.mb_no, s.shipaddr_no ,s.ship_name, s.ship_personName, s.ship_addr, s.ship_tel1, s.ship_tel2, s.ship_tel3, s.ship_default
+	from members m, shippingaddr s
+	where m.mb_no = s.mb_no and m.mb_no =#{mb_no})where rn >= #{start}  and rn <= #{start} + 49
+	]]>
+</select>
+
+<select resultType="int" id="getTotal">select count(*) from members </select>
+
+<!-- order Result -->
+
+
+<select resultType="order" parameterType="int" id="orderResult"> select * from orders o, members m, pay p where o.ord_no = p.ord_no and m.mb_no = o.mb_no and o.ord_no =#{ord_no} </select>
+
+<!-- 주문 후 장바구니 비우기 -->
+
+
+<delete parameterType="int" id="deleteCartAfterOrder">delete from cart where mb_no = #{mb_no} and prod_no in (#{prod_no}) </delete>
+
+<update id="updateCouponused">update couponrefer set cr_isused = 1 where cr_no = #{cr_no} and mb_no = #{mb_no} </update>
+
+</mapper>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="product">
+	
+	<select id="selectList" parameterType="int" resultType="vo.ProductVO" >
+		<![CDATA[
+			select * from (select rownum rn,categorieDe.*,product.*  from categorieDe join product on categorieDe.cd_no = product.prod_no order by prod_no asc) where rn >=#{start} and rn <= #{start} + 49	
+		]]>
+	</select>
+
+	<select id="getTotal" resultType="int">
+	select count(*) from product 
+	</select>
+	
+	<select id="selectSmallCate1" resultType="vo.ProductVO">
+	<![CDATA[
+		select psc_no,psc_name from prodSmallCate where pbc_no= 1
+		]]>
+	</select>
+	
+	<select id="selectSmallCate2" resultType="vo.ProductVO">
+	<![CDATA[
+		select psc_no,psc_name from prodSmallCate where pbc_no= 2
+		]]>
+	</select>
+	
+	<select id="selectProductAll" resultType="vo.ProductVO">
+		select prod_no,prod_name from product 
+	</select>
+	
+	<select id="selectProduct1" resultType="vo.ProductVO">
+	<![CDATA[
+		select prod_no,prod_name from product where rownum <10
+	]]>
+	</select>
+	<select id="selectProduct2" resultType="vo.ProductVO">
+	<![CDATA[
+		select prod_no,prod_name from product where rownum >9 and rownum<20
+		]]>
+	</select>
+	
+	<select id="selectProduct3" resultType="vo.ProductVO">
+	<![CDATA[
+		select prod_no,prod_name from product where rownum >19
+		]]>
+	</select>
+	
+	<insert id="insertProduct" parameterType="vo.ProductVO" >
+		insert into product (prod_no,prod_name,prod_price,prod_sellprice,prod_disc,prod_content,prod_more)values(seq_product_prod_no.nextval,#{prod_name},#{prod_price},#{prod_sellprice},#{prod_disc},#{prod_content,jdbcType=CLOB},#{prod_more})
+	</insert>
+	
+	<update id="updateProduct" parameterType="vo.ProductVO" >
+	begin
+		update product set prod_name = #{prod_name},prod_price = #{prod_price},prod_sellprice = #{prod_sellprice},prod_disc = #{prod_disc},prod_content = #{prod_content,jdbcType=CLOB}, prod_more = #{prod_more} where prod_no = #{prod_no};
+		update prodOption set po_name = #{prod_name},po_price = #{prod_sellprice} where prod_no = #{prod_no} and rownum =1;
+	end;
+	</update>
+	
+	<delete id="deleteProduct" parameterType="String" >
+		delete product where prod_no = #{no}
+	</delete>
+	
+	<select id="selectOne" parameterType="int" resultType="vo.ProductVO">
+		select * from product where prod_no = #{no}
+	</select>
+	
+	<insert id="insertCate" parameterType="vo.ProductVO" >
+		insert into categorieDe values (SEQ_categorieDe_cd_no.nextval,#{cd_list})
+	</insert>
+	
+	<select id="getSeq"  resultType="int">
+		select* from (select product.prod_no from product order by rownum desc) where rownum =1
+	</select>
+	
+	<insert id="insertStock" parameterType="int" >
+		insert into stock(stock_no,prod_no,stock_date) values (SEQ_stock_stock_no.nextval,#{seq},sysdate)
+	</insert>
+	
+	<update id="updateCate" parameterType="vo.ProductVO" >
+		update categorieDe set cd_list = #{cd_list} where cd_no = #{cd_no}
+	</update>
+	<select id="cdList" parameterType="int" resultType="String">
+		select cd_list from categorieDe where cd_no = #{prod_no}
+	</select>
+	
+	<select id="moreList" parameterType="int" resultType="String">
+		select prod_more from product where prod_no = #{prod_no}
+	</select>
+	
+	<insert id="insertPic" parameterType="vo.ProductVO" >
+		insert into productPic values (SEQ_ProductPic_pp_no.nextval,#{prod_no},#{pp_filename,jdbcType=VARCHAR},#{pp_path})
+	</insert>
+	
+	<select id="selectPic" parameterType="int" resultType="vo.ProductVO">
+		select * from productPic where prod_no = #{prod_no} order by pp_no asc
+	</select>
+	
+	<select id="selectOptionList" parameterType="int" resultType="vo.ProductVO">
+	select * from product join prodOption on product.prod_no = prodOption.prod_no and product.prod_no = #{no}
+	</select>
+	
+	<insert id="insertOption" parameterType="vo.ProductVO" >
+		insert into prodOption values(seq_prodOption_po_no.nextval,#{prod_no},#{po_name}, #{po_price})
+	</insert>
+	
+	<select id="getLastProduct" parameterType="int" resultType="vo.ProductVO">
+	select * from product where prod_no =#{seq}
+	</select>
+	
+	<insert id="insertBasicOption" parameterType="vo.ProductVO" >
+		insert into prodOption values(seq_prodOption_po_no.nextval,#{prod_no}, #{prod_name}, #{prod_sellprice})
+	</insert>
+	
+	<delete id="deleteOption" parameterType="String" >
+		delete prodOption where po_no = #{no}
+	</delete>
+</mapper>
+
+
+
+
+
+
+
+
+

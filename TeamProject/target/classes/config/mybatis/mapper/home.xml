@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="home">
+	
+<select id="selectSmallCate1" resultType="vo.ProductVO">
+		select psc_no,psc_name from prodSmallCate where pbc_no =1 order by psc_no asc
+	</select>
+	
+	<select id="selectSmallCate2" resultType="vo.ProductVO">
+		select psc_no,psc_name from prodSmallCate where pbc_no =2 order by psc_no asc
+
+	</select>
+	
+	<select id="selectBannerList" resultType="vo.ManagementVO">
+		select * from adminPic where ap_filename like '%' || 'Banner' || '%'
+	</select>
+	
+	<select id="selectList" parameterType="String" resultType="vo.ProductVO">
+	select p.*,c.cd_list,i.pp_filename,i.pp_path from product p,categorieDE c , productPic i  where p.prod_no = c.cd_no and c.cd_no = i.prod_no and cd_list like '%' || 'best' || '%' and pp_filename like '%' || 'Main' || '%'
+	</select>
+	<select id = "selectBigCate" resultType="vo.ProductVO">
+	select * from prodBigCate
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="join">
+	
+		
+	<insert parameterType="vo.JoinVO" id="insert">
+	insert into members values(SEQ_members_mb_no.nextval,1,#{mb_id},#{mb_pw},#{mb_name},#{mb_resi1},#{mb_resi2},#{mb_email1}, #{mb_email2},#{mb_post},CONCAT(#{mb_baseaddr},#{mb_detailaddr}),#{mb_tel1},#{mb_tel2},#{mb_tel3},sysdate,#{mb_bir}, #{mb_type}, #{mb_point}, #{mb_tp},#{mb_rcid},#{mb_14},#{mb_service},#{mb_info},#{mb_sms},#{mb_ckmail}, 0) 
+	</insert>
+
+	<insert parameterType="vo.JoinVO" id="kakaoInsert">
+	insert into members (mb_no,grade_no,mb_id,mb_name,mb_email1,mb_email2,mb_post,mb_detailaddr,mb_tel1,mb_tel2,mb_tel3,mb_date,mb_bir,mb_type,mb_point,mb_tp,mb_rcid,mb_14,mb_service,mb_info,mb_sms,mb_ckmail,mb_leave)values
+	(SEQ_members_mb_no.nextval,1,#{mb_id},#{mb_name},#{mb_email1}, #{mb_email2},#{mb_post},CONCAT(#{mb_baseaddr},#{mb_detailaddr}),#{mb_tel1},#{mb_tel2},#{mb_tel3},sysdate,#{mb_bir}, 0, 0, 0,#{mb_rcid},#{mb_14},#{mb_service},#{mb_info},#{mb_sms},#{mb_ckmail}, 0) 
+	</insert>
+	
+	<select resultType="String" parameterType="String" id="checkId">select mb_id from members where mb_id=#{mb_id} </select>
+	
+	<select id="selectLastMb" resultType="int">
+	select * from (select members.mb_no from members order by rownum desc) where rownum =1
+	</select>
+	
+	<insert id="joinCpn" parameterType="vo.OrderVO">
+		insert into couponRefer values(seq_couponRefer_cr_no.nextval,#{cpn_no},#{mb_no},sysdate,sysdate+30,#{cr_serial},0)
+	</insert>
+	
+	<select id="selectCpnNo"  resultType="int">
+	select cpn_no from coupon where cpn_name like '%' || '회원가입' || '%'
+	</select>
+		
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

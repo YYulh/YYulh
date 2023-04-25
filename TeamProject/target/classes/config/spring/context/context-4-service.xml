@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<bean id="AdMemberService" class="service.admin.AdMemberService">
+		<constructor-arg ref="AdMemberDAO"/>
+	</bean>
+
+	<bean id="AdProductService" class="service.admin.AdProductService">
+		<constructor-arg ref="AdProductDAO"/>
+	</bean>
+	
+	<bean id="AdStockService" class="service.admin.AdStockService">
+		<constructor-arg ref="AdStockDAO"/>
+	</bean>
+	
+	<bean id="LoginService" class="service.member.LoginService">
+		<constructor-arg ref="LoginDAO"/>
+	</bean>
+	
+	<bean id="MypageService" class="service.member.MypageService">
+		<constructor-arg ref="MypageDAO"/>
+	</bean>
+	
+	<bean id="HomeService" class="service.member.HomeService">
+		<constructor-arg ref="HomeDAO"/>
+	</bean>
+	
+	<bean id="ProductListService" class="service.member.ProductListService">
+		<constructor-arg ref="ProductListDAO"/>
+	</bean>
+	
+	<bean id="AdManagementService" class="service.admin.AdManagementService">
+		<constructor-arg ref="AdManagementDAO"/>
+	</bean>
+	
+	<bean id="OrderService" class="service.member.OrderService">
+		<constructor-arg ref="OrderDAO"/>
+	</bean>
+	
+	<bean id="BoardService" class="service.member.BoardService">
+		<constructor-arg ref="BoardDAO"/>
+	</bean>
+	
+	<bean id="AdCouponService" class="service.admin.AdCouponService">
+		<constructor-arg ref="AdCouponDAO"/>
+	</bean>
+	
+	<bean id="AdCategorieService" class="service.admin.AdCategorieService">
+		<constructor-arg ref="AdCategorieDAO"/>
+	</bean>
+	
+	<bean id="AdGradeService" class="service.admin.AdGradeService">
+		<constructor-arg ref="AdGradeDAO"/>
+	</bean>
+	
+	<bean id="JoinService" class="service.member.JoinService">
+		<constructor-arg ref="JoinDAO"/>
+	</bean>
+
+</beans>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="login">
+	
+		
+	
+	<select id="checkLogin" parameterType="vo.MemberVO" resultType="vo.MemberVO">
+	 select mb_no,mb_id from members where mb_id = #{mb_id} and mb_pw = #{mb_pw} and mb_leave=0
+	</select>
+	
+	<select id="checkKakaoLogin" parameterType="vo.MemberVO" resultType="vo.MemberVO">
+	 select mb_no,mb_name from members where mb_id = #{mb_id} and mb_name = #{mb_name} and mb_leave=0
+	</select>
+	
+	<select id="findId" parameterType="vo.MemberVO" resultType="String">
+		select mb_id from members where mb_name=#{mb_name} and mb_tel1=#{mb_tel1} and mb_tel2=#{mb_tel2} and mb_tel3=#{mb_tel3}
+	</select>
+	
+	<select id="findPw" parameterType="vo.MemberVO" resultType="String">
+	select mb_pw from members where mb_id=#{mb_id} and mb_name=#{mb_name} and mb_tel1=#{mb_tel1} and mb_tel2=#{mb_tel2} and mb_tel3=#{mb_tel3}	
+	</select>
+	
+	<select id="findId2" parameterType="vo.MemberVO" resultType="String">
+		select mb_id from members where mb_name=#{mb_name} and mb_email1=#{mb_email1} and mb_email2=#{mb_email2}
+	</select>
+	
+	<select id="findPw2" parameterType="vo.MemberVO" resultType="String">
+	select mb_pw from members where mb_id=#{mb_id} and mb_name=#{mb_name} and mb_email1=#{mb_email1} and mb_email2=#{mb_email2}	
+	</select>
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

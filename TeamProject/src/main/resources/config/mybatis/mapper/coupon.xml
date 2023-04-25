@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="coupon">
+		
+	
+	<select id="selectCpnList" parameterType="int" resultType="vo.CouponVO" >
+	<![CDATA[
+	select * from (select rownum rn, c.*,g.grade_name from coupon c join grade g on c.grade_no = g.grade_no order by c.cpn_no asc) where rn >=#{start} and rn <= #{start} + 14	
+	]]>
+	</select>	
+
+	<select id="getTotal" resultType="int">
+	select count(*) from coupon
+	</select>
+	
+	<select id="selectGrade" resultType="vo.GradeVO">
+		select * from grade order by grade_no asc
+	</select>
+	
+	<insert id="newCoupon" parameterType="vo.CouponVO">
+		insert into coupon values(seq_coupon_cpn_no.nextval,#{grade_no},#{cpn_name},#{cpn_per},#{cpn_price})
+	</insert>
+	
+	<delete id = "deleteCpn" parameterType = "String">
+		delete from coupon where cpn_no =#{no}
+	</delete>
+	
+	<select id="getRimit" resultType="int" parameterType = "int">
+		select g.grade_price from coupon c join grade g on c.grade_no = g.grade_no and c.cpn_no=#{no}
+	</select>
+	
+	<select id="selectMbList" resultType="vo.MemberVO" parameterType = "int">
+		select * from members m join grade g on m.grade_no = g.grade_no and g.grade_price >= #{limit} and mb_leave = 0
+	</select>
+	
+	<insert id="insertUser" parameterType="vo.CouponVO">
+		insert into couponRefer values(seq_couponRefer_cr_no.nextval,#{cpn_no},#{mb_no},sysdate,sysdate+30,#{cr_serial},0)
+	</insert>
+	
+	<select id="selectBir" resultType="vo.MemberVO">
+		select * from members where to_char(mb_bir,'mmdd')= to_char(sysdate,'mmdd')
+	</select>
+	
+	<select id="getBirCpn" resultType="int">
+		select cpn_no from coupon where cpn_name like '%' || '생일' || '%'
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

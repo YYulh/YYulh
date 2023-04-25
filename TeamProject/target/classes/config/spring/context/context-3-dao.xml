@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+	
+	<bean id="AdMemberDAO" class="dao.admin.AdMemberDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="AdProductDAO" class="dao.admin.AdProductDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="AdStockDAO" class="dao.admin.AdStockDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="LoginDAO" class="dao.member.LoginDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="MypageDAO" class="dao.member.MypageDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="HomeDAO" class="dao.member.HomeDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="ProductListDAO" class="dao.member.ProductListDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+		
+	<bean id="AdManagementDAO" class="dao.admin.AdManagementDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="OrderDAO" class="dao.member.OrderDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="BoardDAO" class="dao.member.BoardDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="AdCouponDAO" class="dao.admin.AdCouponDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="AdCategorieDAO" class="dao.admin.AdCategorieDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="AdGradeDAO" class="dao.admin.AdGradeDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="JoinDAO" class="dao.member.JoinDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+</beans>

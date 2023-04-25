@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="grade">
+
+	<select id="selectGrade" resultType="vo.GradeVO">
+		select * from grade order by grade_no asc
+	</select>
+	
+	<insert id="insertGrade" parameterType = "vo.GradeVO" useGeneratedKeys="false">
+		merge 
+		into grade 
+		using dual
+		on(grade_no = #{grade_no})
+		when matched then
+		update
+		set grade_name = #{grade_name}, grade_price= #{grade_price}, grade_per = #{grade_per}
+		when not matched then
+		insert(grade_no,grade_name,grade_price,grade_per)
+		values(seq_grade_grade_no.nextval,#{grade_name},#{grade_price},#{grade_per})
+	</insert>
+	
+	<delete id = "deleteGrade" parameterType = "String">
+		delete from grade where grade_no =#{no}  
+	</delete>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
