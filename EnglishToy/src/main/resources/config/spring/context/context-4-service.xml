@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean id="UserService" class="service.UserService">
+		<constructor-arg ref="UserDAO"/>
+	</bean>
+	
+	<bean id="WordService" class="service.WordService">
+		<constructor-arg ref="WordDAO"/>
+	</bean>
+	
+	<bean id="AdminService" class="service.AdminService">
+		<constructor-arg ref="AdminDAO"/>
+	</bean>
+
+	<!-- 2022.12.18 추가 -->
+	<bean id="LoginService" class="service.LoginService">
+		<constructor-arg ref="LoginDAO"/>
+	</bean>
+
+	<bean id="JoinService" class="service.JoinService">
+		<constructor-arg ref="JoinDAO"/>
+	</bean>
+	
+	<bean id="TransService" class="service.TransService">
+		<constructor-arg ref="TransDAO"/>
+	</bean>
+
+</beans>
